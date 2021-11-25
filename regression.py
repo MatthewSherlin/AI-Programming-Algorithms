@@ -1,9 +1,7 @@
 import os
 import sys
 
-def main():
-    
-    def func(numPoints, xVals, yVals):
+def func(numPoints, xVals, yVals):
         #sum of x points and mean
         sumX=0
         for x in xVals:
@@ -42,6 +40,7 @@ def main():
         print("The slope of the points is", slope, "and the y-intercept of the points is", intercept)
         print("y=", slope,"x +", intercept)
 
+def main():
     print("Enter list of x values separated by spaces")
     # store in x values
     str_arr = input().split(' ') #will take in a string of numbers separated by a space
