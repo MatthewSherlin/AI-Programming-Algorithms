@@ -1,6 +1,5 @@
 import os
 import sys
-import numpy as np
 import math
 from math import dist   
 import random
