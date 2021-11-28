@@ -144,7 +144,7 @@ def generate_seed_points(xVals, yVals, numClusters):
         points2.remove(randSeedXY)
     
     #calculating radius
-    radius = infinityPositive
+    radius = 100
     for i in range(numClusters):
         for j in points2:
             tempDist = dist(seedPoints[i], points2[j])
