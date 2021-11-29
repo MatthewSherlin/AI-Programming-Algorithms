@@ -3,6 +3,7 @@ import sys
 import math
 from math import dist   
 import random
+import numpy as np
 
 #initializing variables
 numClusters=0   
@@ -26,17 +27,22 @@ def main():
             xVals.append(row[0])
             yVals.append(row[1])
             points.append((row[0], row[1]))
-    
+    print("all points: ",points)
+    print("xValues: ",xVals)
+    print("yValues: ",yVals)
+
     #input number of clusters
-    numClusters=float(input("Enter in number of clusters: "))
+    numClusters=int(input("Enter in number of clusters: "))
     print("Number of Clusters:", numClusters)
 
     #input shifting threshold value
     threshold=float(input("Enter in maximum centroid shift threshold: "))
     print("Threshold:", threshold)
 
-    #call generate_seed_points(centroid, threshold)
-    seedPoints, radius = generate_seed_points(xVals, yVals, numClusters)
+    #call generate_seed_points(points, num clusters)
+    randSeedy = 0
+    randSeedy = 0
+    radius = generate_seed_points(xVals, yVals, numClusters)
 
     #input max loops
     maxLoop=float(input("Enter in maximum amount of loops: "))
@@ -110,47 +116,60 @@ def main():
 # outputs set of seed points, radius of clusters
 def generate_seed_points(xVals, yVals, numClusters):
     #determining the population to use?
-    maxX, maxY, minX, minY, sizeX, sizeY, xLow, xMid, xHigh, yLow, yMid, yHigh, numMacro = 0 #some of these variables may be arrays
+#    maxX, maxY, minX, minY, sizeX, sizeY, xLow, xMid, xHigh, yLow, yMid, yHigh, numMacro = 0 #some of these variables may be arrays
     #density = []?
-    for x in xVals:
-        xVals[x] = x * math.pi
-    for y in yVals:
-        yVals[y] = y * math.pi
-    maxX = max(xVals)
-    maxY = max(yVals)
-    minX = min(xVals)
-    minY = min(yVals)
-    sizeX = (maxX-minX)/numClusters
-    sizeY = (maxY-minY)/numClusters #in the pseudocode sizeY = (maxX-minX)/numClusters. is this a typo?
-    numMacro = numClusters * numClusters
-    #density  #density calculation goes here. how do i calculate this?
+#    for x in xVals:
+#        xVals[x] = x * math.pi
+#    for y in yVals:
+#        yVals[y] = y * math.pi
+#    maxX = max(xVals)
+#    maxY = max(yVals)
+#    minX = min(xVals)
+#    minY = min(yVals)
+#    sizeX = (maxX-minX)/numClusters
+#    sizeY = (maxY-minY)/numClusters #in the pseudocode sizeY = (maxX-minX)/numClusters. is this a typo?
+#    numMacro = numClusters * numClusters
+    #density calculation goes here. how do i calculate this?
     #initialize set of macroblocks with higher than average density Sh ={}
-    for i in range(numClusters):
-        xLow  = minX + i * sizeX
-        xHigh = xLow + sizeX
-        xMid  = (xLow + xHigh)/2
-        for j in range(numClusters):
-            yLow  = minY + i * sizeY
-            yHigh = yLow + sizeY
-            yMid  = (yLow + yHigh)/2
+#    for i in range(numClusters):
+#        xLow  = minX + i * sizeX
+#        xHigh = xLow + sizeX
+#        xMid  = (xLow + xHigh)/2
+#        for j in range(numClusters):
+#            yLow  = minY + i * sizeY
+#            yHigh = yLow + sizeY
+#            yMid  = (yLow + yHigh)/2
             #δmacro = points_in_macroblocks(SP, xlow, ylow, xhigh, yhigh); wtf does this mean
             #if ( δmacro > δavg) Sh = (xmid, ymid); no clue what this does either
     
     #initializing seed points
-    points2=points
+    seedPointx = []
+    seedPointy = []
     for i in range(numClusters):
-        randSeedXY = random.choice(points)
-        seedPoints.append(randSeedXY)
-        points2.remove(randSeedXY)
-    
+        index = random.choice(range(len(xVals)))
+        randSeedx = xVals[index]
+        randSeedy = yVals[index]
+        seedPointx.append(randSeedx)
+        seedPointy.append(randSeedy)
+        xVals.remove(randSeedx)
+        yVals.remove(randSeedy)
+
     #calculating radius
     radius = 100
+    tempDist = 0
+    print("seedpointx:", seedPointx, "seedpointy:", seedPointy)
     for i in range(numClusters):
-        for j in points2:
-            tempDist = dist(seedPoints[i], points2[j])
+        for j in xVals:
+            print("current seedPoint(x,y): ", seedPointx[i], seedPointy[i], "current point(x,): ", xVals[i], yVals[i])
+            tempDist = distCalc([seedPointx[i],seedPointy[i]],[xVals[j],yVals[j]]) #one or more of these arrays are string type and need to be float
             if (tempDist < 2 * radius):
                 radius = tempDist/2
 
-    return seedPoints, radius
+    return seedPointx, seedPointY, radius
+
+#Euclidian distance calculation
+def distCalc(x, y, x1, y2):
+    temp = sqrt((x-x1)**2 + (y-y2)**2)
+
 if __name__ == '__main__':
     main()
