@@ -1,7 +1,8 @@
 import os
 import sys
 import math
-from math import dist   
+from math import dist
+from math import sqrt
 import random
 import numpy as np
 
@@ -24,8 +25,8 @@ def main():
     with open('textFiles\kMeansTextFile.txt') as f:
         for line in f:
             row = line.split()
-            xVals.append(row[0])
-            yVals.append(row[1])
+            xVals.append(int(row[0]))
+            yVals.append(int(row[1]))
             points.append((row[0], row[1]))
     print("all points: ",points)
     print("xValues: ",xVals)
@@ -59,7 +60,7 @@ def main():
     clusters = []
 
     #big while loop that clusters
-    while count < maxLoop and stabilized == False:
+    while counter < maxLoop and stabilized == False:
         outliers=[]
         outliers=points
         clusterSequence=[]
@@ -115,32 +116,6 @@ def main():
 # inputs set of points and number of clusters
 # outputs set of seed points, radius of clusters
 def generate_seed_points(xVals, yVals, numClusters):
-    #determining the population to use?
-#    maxX, maxY, minX, minY, sizeX, sizeY, xLow, xMid, xHigh, yLow, yMid, yHigh, numMacro = 0 #some of these variables may be arrays
-    #density = []?
-#    for x in xVals:
-#        xVals[x] = x * math.pi
-#    for y in yVals:
-#        yVals[y] = y * math.pi
-#    maxX = max(xVals)
-#    maxY = max(yVals)
-#    minX = min(xVals)
-#    minY = min(yVals)
-#    sizeX = (maxX-minX)/numClusters
-#    sizeY = (maxY-minY)/numClusters #in the pseudocode sizeY = (maxX-minX)/numClusters. is this a typo?
-#    numMacro = numClusters * numClusters
-    #density calculation goes here. how do i calculate this?
-    #initialize set of macroblocks with higher than average density Sh ={}
-#    for i in range(numClusters):
-#        xLow  = minX + i * sizeX
-#        xHigh = xLow + sizeX
-#        xMid  = (xLow + xHigh)/2
-#        for j in range(numClusters):
-#            yLow  = minY + i * sizeY
-#            yHigh = yLow + sizeY
-#            yMid  = (yLow + yHigh)/2
-            #δmacro = points_in_macroblocks(SP, xlow, ylow, xhigh, yhigh); wtf does this mean
-            #if ( δmacro > δavg) Sh = (xmid, ymid); no clue what this does either
     
     #initializing seed points
     seedPointx = []
@@ -159,17 +134,18 @@ def generate_seed_points(xVals, yVals, numClusters):
     tempDist = 0
     print("seedpointx:", seedPointx, "seedpointy:", seedPointy)
     for i in range(numClusters):
-        for j in xVals:
-            print("current seedPoint(x,y): ", seedPointx[i], seedPointy[i], "current point(x,): ", xVals[i], yVals[i])
-            tempDist = distCalc([seedPointx[i],seedPointy[i]],[xVals[j],yVals[j]]) #one or more of these arrays are string type and need to be float
+        for j in range(len(xVals)):
+            print("current seedPoint(x,y): ", seedPointx[i], seedPointy[i], "current point(x,): ", xVals[j], yVals[j])
+            tempDist = distCalc(seedPointx[i],seedPointy[i],xVals[j],yVals[j])
             if (tempDist < 2 * radius):
                 radius = tempDist/2
 
-    return seedPointx, seedPointY, radius
+    return seedPointx, seedPointy, radius
 
 #Euclidian distance calculation
-def distCalc(x, y, x1, y2):
-    temp = sqrt((x-x1)**2 + (y-y2)**2)
+def distCalc(x,x1,y,y1):
+    temp = sqrt((x-x1)**2 + (y-y1)**2)
+    return temp
 
 if __name__ == '__main__':
     main()
