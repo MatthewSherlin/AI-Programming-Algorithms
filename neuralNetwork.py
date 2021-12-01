@@ -61,7 +61,8 @@ def create_vector_bias(biasValue, vectorSize):
 
 def adjust_weight(numLayers, seqMatrixes, targetVector, actualVector, errorE, errorThreshold, learningRate):
     count = 1
-    while errorE > errorThreshold and count <= maxCount: 
+    while errorE > errorThreshold and count <= maxCount:
+        return 
 
 
 if __name__ == '__main__':
