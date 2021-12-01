@@ -5,21 +5,16 @@ from math import dist
 import random
 import numpy as np
 
-xVals = []
-yVals = []
-points = []
-
+numList = 0
+list1 = []
+list2 = [1,2,3]
 def main():
 
-	with open('textFiles\kMeansTextFile.txt') as f:
-		for line in f:
-			row = line.split()
-			xVals.append(int(row[0]))
-			yVals.append(int(row[1]))
-			points.append((row[0], row[1]))
-		print("all points: ", points)
-		print("X values: ", xVals)
-		print("Y valyes: ", yVals)
+	numList = int(input("enter num of lists: "))
+	print(numList)
+	for i in range(numList):
+		list1.append(list2)
+	print(list1)
 
 if __name__ == '__main__':
 	main()
