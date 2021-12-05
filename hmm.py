@@ -1,8 +1,10 @@
 from itertools import product
 
+#set states and emission vectors. Remain with A- and X-
 states=['A','B','C']
 emissions=['X','Y','Z']
 
+#setting transition matrix and emission matrix
 transitionMatrix=[[0.9, 0.0, 0.1], #A
                   [0.2, 0.6, 0.2], #B
                   [0.2, 0.5, 0.3]] #C
@@ -12,46 +14,63 @@ emissionMatrix=[[0.6, 0.3, 0.1], #A
                 [0.1, 0.7, 0.2], #B
                 [0.2, 0.3, 0.5]] #C
 
+#setting probability vector
 probVector=[0.0, 0.2, 0.4]
 sequenceEmissions = []
 
-#finished
+#main driver
 def main():
     get_path = True
     while(get_path):
+        #get emission sequence from user
         sequenceEmissions= list(map(str, input("Enter the emission sequence: ").strip().split()))
+        #if it is valid, run
         if(valid_emission(sequenceEmissions, emissions) == True):
-            #transition_set=[]
             print("All possible paths: ")
+            #cartesian product to get all possible paths
             s3 = list(product(states, states, states))
             print(s3)
             probablePaths = []
+            #for each possible path from cartesian product:
             for each in s3:
+                #if they are valid, they are added to probable paths, the others are discarded
                 if(valid_transitions(each, transitionMatrix, probVector)==True):
                     probablePaths.append(each)
             print("All probable paths: ")
             print(probablePaths)
+            #setting maximum probability list
             maxProb = ['', 0.0]
+            #for each path in the probable paths, calculate probability and if it is higher than max, replace it
             for set in probablePaths:
                 probability = path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions)
                 print("Next probable sequence is:", set, "with a probability of:", probability)
                 if(maxProb[1] < probability):
                     maxProb = (set, probability)
+            #finally, print the highest probability
             print("\nMost probable sequence is:", maxProb[0], "with a probability of:", maxProb[1], "\n")
+        else:
+            print("Emission sequence is invalid. Exiting...")
+            exit()
         exit()
 
-#finished
+#check if emissions are valid. Making sure that user is inputting characters that exist in the vector
 def valid_emission(setEmissions, emissions):
+    #if too many emissions are added, false
+    if(len(probVector) != len(setEmissions)):
+        return False 
+    #if the characters are incorrect, false
     for ch in setEmissions:
         if ch not in emissions:
                 return False
     return True
 
 def valid_transitions(states, matrix, probVector):
+    #initializing some counters
     n = len(states)
     m=1
     j=0
     path_possible=True
+    #set inital probability vector to first state
     if(states[0] == 'A'):
         j=probVector[0]
     if(states[0] == 'B'):
@@ -63,9 +82,11 @@ def valid_transitions(states, matrix, probVector):
     if(states[0] == 'E'):
         j=probVector[4]
 
+    #if inital prob vector value is 0.0, false
     if (j <= 0.0 ):
         path_possible=False
 
+    #if paths in matrix are 0.0, they are untraversable
     while(m < n and path_possible==True):
         i = m
         j = m
@@ -75,6 +96,7 @@ def valid_transitions(states, matrix, probVector):
             j = j+1
         m= m+1
 
+    #if path is possible, then add to possible paths list
     if(path_possible):
         return True
     else: 
@@ -82,7 +104,6 @@ def valid_transitions(states, matrix, probVector):
 
 
 def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions):
-    
     #getting the initial probability number
     init = 0
     if(set[0] == 'A'):
@@ -117,9 +138,9 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
         finalSum = init*var1*var2*var3*var4*em1*em2*em3*em4*em5
         return finalSum
 
+    #getting the final probability sum and returning it
     finalSum = init * var1 * var2 * em1 * em2 * em3
     return finalSum
-
 
 
 if __name__ == '__main__':
