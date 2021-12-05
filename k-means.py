@@ -5,6 +5,7 @@ from math import dist
 from math import sqrt
 import random
 import numpy as np
+import copy
 
 #initializing variables
 numClusters=0   
@@ -15,12 +16,10 @@ xVals = []
 yVals = []
 points = []
 radius = 0
-seedPoints = []
 counter = 0
 stabilized = True
-firstCentroidx=[]
-firstCentroidy=[]
-infinityPositive = math.inf
+centroidX=[]
+centroidY=[]
 
 def main():
     #open & read in file
@@ -29,109 +28,113 @@ def main():
             row = line.split()
             xVals.append(int(row[0]))
             yVals.append(int(row[1]))
-            points.append((row[0], row[1]))
-    print("all points: ",points)
     print("xValues: ",xVals)
     print("yValues: ",yVals)
 
     #input number of clusters
     numClusters=int(input("Enter in number of clusters: "))
-    print("Number of Clusters:", numClusters)
+    print("Number of Clusters:", numClusters, "\n")
 
     #input maximum shift threshold value
     maxShift=float(input("Enter in maximum centroid shift threshold: "))
-    print("Maximum shift:", maxShift)
+    print("Maximum shift:", maxShift, "\n")
 
     #input threshold value
     radius=int(input("Enter in centroid radius: "))
-    print("Radius: ", radius)
+    print("Radius: ", radius, "\n")
 
     #input max loops
     maxLoop=float(input("Enter in maximum amount of loops: "))
-    print("Maximum loops:", maxLoop)
+    print("Maximum loops:", maxLoop, "\n")
 
     #call generate_seed_points(points, num clusters)
+    centroidX, centroidY = generate_seed_points(xVals, yVals, numClusters)
 
-    firstCentroidx, firstCentroidy = generate_seed_points(xVals, yVals, numClusters)
-    for i in range(len(firstCentroidx)):
-        print("First Centroids(x,y): ", "(", firstCentroidx[i], ",", firstCentroidy[i], ")") 
-
-    #setting count to 1 and stabilized to false
+    #setting count to 1 and stabilized to false, init outliers
     counter = 0
     stabilized=False
-            
-    #copying centroid into another xy point
-    firstCentroids = seedPoints #seedPoints[(1,1), (2,3), ...]
-
-    #create a vector with size number of clusters of set of points
-    clusters = []
+    outliersX=[]
+    outliersY=[]
 
     #big while loop that clusters
     while counter < maxLoop and stabilized == False:
-        outliersX=[]
-        outliersY=[]
-        clusterSequence=[]
-        clusterX=[]
-        clusterY=[]
-        tempListx = []
-        tempListy = []
-        tempOutx = []
-        tempOuty = []
+        #these variables could do with being delcared before the while loop or before the function uses them to improve readability
+        clusterX=[[] for _ in range(numClusters)]
+        clusterY=[[] for _ in range(numClusters)]
+        pointArr=[]
+        distArr = []
         tempDist = 0
         meanX = 0
         meanY = 0
 
-        #go through the new cycle of computing clusters and centroids
-        for i in range(numClusters):
-            temp = 0
-            for j in range(len(xVals)):
-                tempDist = distCalc(firstCentroidx[i], firstCentroidy[i], xVals[j], yVals[j])
-                print("current centroid(x,y): ", firstCentroidx[i], firstCentroidy[i], "current point(x,y): ", xVals[j], yVals[j], "tempDist: ", tempDist)
-                if tempDist < radius:
-                    tempListx.append(xVals[j])
-                    tempListy.append(yVals[j])
-                    clusterX.append(tempListx)
-                    clusterY.append(tempListy)
-                    temp = temp + 1
-                else:
-                    tempOutx.append(xVals[j])
-                    tempOuty.append(yVals[j])   
-                    outliersX.append(tempOutx)
-                    outliersY.append(tempOuty)
-            
-            print("cluster: ", i+1, "X outliers: ", outliersX[i])
-            print("cluster: ", i+1, "Y outliers: ", outliersY[i])
-            print("cluster: ", i+1, "X points in cluster: ", clusterX[i])
-            print("cluster: ", i+1, "Y points in cluster: ", clusterY[i])
-            #x-mean of the points in the new cluster
-            meanX = (sum(clusterX[i]))/temp
-            print("Mean X: ", meanX)
-            #y-mean of the points in the new cluster
-            meanY = (sum(clusterY[i]))/temp
-            print("Mean Y:", meanY)
-        exit()
-            #collect centroids of the new clusters
-#            clusterSequence = (meanX, meanY) + clusterSequence
-#            print("Cluster #", i, "New Centroid:", meanX, meanY)
-            #end for loop
+        #prints loop number
+        print("\n")
+        print("Loop number: ", counter + 1)
 
-        print("Current Outliers:", outliers)
-        stabilized = True
+        #prints centroid value
+        for i in range(len(centroidX)):
+            print("Centroids(x,y) ",i+1, ": (", centroidX[i], ",", centroidY[i], ")") 
+        
+        #calculating distance between each point and centroids
+        for i in range(len(xVals)):
+            del distArr
+            distArr = []
+            for j in range(numClusters):
+                #calculation distance
+                tempDist = distCalc(xVals[i], yVals[i], centroidX[j], centroidY[j])
+                distArr.append(tempDist)
+                #print("current point(x,y): ", xVals[i], yVals[i], "current centroid(x,y): ", centroidX[j], centroidY[j], "tempDist: ", tempDist)
+            tp = pointdist(xVals[i], yVals[i], distArr)
+            pointArr.append(tp)
+
+        outliersX.clear()
+        outliersY.clear()
+        #inserting into outliers and clusters
+        for obj in pointArr:
+            #obj.printData()
+            dist, i = obj.getIndex()
+            if dist < radius:
+                clusterX[i].append(obj.getX())
+                clusterY[i].append(obj.getY())
+            else: 
+                outliersX.append(obj.getX())
+                outliersY.append(obj.getY())
+
+        #printing cluster values
         for i in range(numClusters):
-            XnewC = math.pi(clusterSequence[i(0)])
-            YnewC = math.pi(clusterSequence[i(1)])
-            Xc = math.pi(firstCentroids[i(0)])
-            Yc = math.pi(firstCentroids[i(1)])
-            centroid_shift=math.sqrt((pow((XnewC-Xc),2))+(pow((YnewC-Yc),2)))
-            if centroid_shift > threshold:
-                stabilized = False
-        firstCentroids = clusterSequence
+            print("Cluster: ", i+1, "x values: ", clusterX[i])
+            print("Cluster: ", i+1, "y values: ", clusterY[i])
+            if (len(clusterX[i])) == 0:
+                print("Centroid ", i+1, "has no points within radius. Exiting")
+                exit()
+
+        for i in range(numClusters):
+            #calculating x and y mean
+            meanX = (sum(clusterX[i]))/(len(clusterX[i]))
+            meanY = (sum(clusterY[i]))/(len(clusterY[i]))
+            print("Cluster: ", i+1, "Mean x: ", meanX, "Mean y: ", meanY)
+
+            #calculating centroid shift
+            tempDist = distCalc(meanX, meanY, centroidX[i], centroidY[i])
+            if tempDist < maxShift:
+                stabilized = True
+                print("Centroid ", i+1 ,"shift : ", tempDist,"is less than max shift, stabilized. Exiting")
+                break
+            else:
+                print("Centroid ", i+1 ,"shift: ", tempDist)
+
+            #setting new centroid values
+            centroidX[i] = meanX
+            centroidY[i] = meanY
+
+        #incrementing counter
         counter = counter + 1
-    #output centroids, sequence of points in clusters, and outliers for each loop
-    print("Final Clusters and Outliers:")
-    for i in range(numClusters):
-        print(clusters[i])
-    print(outliers)
+        if counter == maxLoop:
+            print("Max Loop reached, exitng")
+
+    #printing outlier values
+    print("Outliers x values: ", outliersX)
+    print("Outliers y values: ", outliersY)
         
 
 # inputs set of points and number of clusters
@@ -156,6 +159,27 @@ def generate_seed_points(xVals, yVals, numClusters):
 def distCalc(x,y,x1,y1):
     temp = math.sqrt(((x-x1)**2) + ((y-y1)**2))
     return temp
+
+class pointdist:
+    def __init__(self, x, y, dist):
+            self.x = x
+            self.y = y
+            self.distNum = dist
+
+    def printData(self):
+        print("(x,y): ", self.x, self.y,"distance: ", self.distNum)
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
+
+    def getIndex(self):
+        minDist = min(self.distNum)
+        index = self.distNum.index(minDist)
+        return minDist, index
+
 
 if __name__ == '__main__':
     main()
