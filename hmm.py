@@ -24,7 +24,7 @@ def main():
     while(get_path):
         #get emission sequence from user
         sequenceEmissions= list(map(str, input("Enter the emission sequence: ").strip().split()))
-        #if it is valid, run
+        #if it is valid, run the rest of code
         if(valid_emission(sequenceEmissions, emissions) == True):
             print("All possible paths: ")
             #cartesian product to get all possible paths
