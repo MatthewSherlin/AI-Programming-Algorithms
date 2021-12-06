@@ -16,7 +16,6 @@ def main():
 	learningRate=float(input("Please learning rate: "))
 	bias=float(input("Please provide bias: "))
 	threshold=float(input("Please provide perceptron threshold: "))
-	errorThreshold=float(input("Please provide error threshold: "))
 	outVector= list(map(int, input("Enter the output vector: ").strip().split()))
 	print(outVector)
 	"""if(len(outVector) != len(nOut)):
@@ -25,28 +24,43 @@ def main():
 
 	print("\n")
 
-	#generating initial vector
-	inVect = generateInputVector(nIn)
-	print("initial vect: ", inVect)
-	
 	#generating matrixes
 	inHiddenM = genInputHiddenMatrix(nIn, nPercep)
 	hiddenOutM = genHiddenOutputMatrix(nOut, nPercep)
 	print("\n")
+	
+	loop = 0
+	while loop < 100:
+		#prints loop num
+		print("Loop: ", loop+1)
 
-	#generating value of hidden layer perceptrons
-	fireList=fireCalc(inVect, inHiddenM, bias, threshold)
-	print("1 is fire, 0 is no fire.\nFire list is:", fireList)
+		#generating initial vector
+		inVect = generateInputVector(nIn)
+		print("initial vect: ", inVect)
 
-	#generating output value
-	outList = fireOut(fireList, hiddenOutM)
-	print("Output list is:", outList)
+		#generating value of hidden layer perceptrons
+		percepList=fireCalc(inVect, inHiddenM, bias, threshold)
+		print("Perceptron list is:", percepList)
 
-	error=calcError(outList,outVector)
-	print("Error list:" ,error)
+		#generating output value
+		outList = outCalc(percepList, hiddenOutM, bias)
+		print("Output list is:", outList)
 
+		#error calculation
+		error=calcError(outList,outVector, learningRate)
+		print("Error list: ",error)
+		totalError = np.sum(error)
+		if totalError == 0:
+			print("Actual output achieved on loop: ", loop+1)
+			exit()
 
-
+		#weight adjustment
+		inHiddenM = matrixAdd(inHiddenM, error)
+		hiddenOutM = matrixAdd(hiddenOutM, error)
+		print("input to hidden matrix after weight change: \n", inHiddenM)
+		print("hidden to output matrix after weight change: \n", hiddenOutM)
+		print("\n")
+		loop = loop + 1
 
 
     
@@ -81,33 +95,43 @@ def fireCalc(inVect, inMatrix, bias, threshold):
 	matrix=np.matmul(inVect, inMatrix)
 	fireList=[]
 	i=0
-	while i < len(matrix):
+	"""while i < len(matrix):
 		if((matrix[i]+bias)>=threshold):
 			fireList.append(1)
 			i=i+1
 		else:
 			fireList.append(0)
 			i=i+1
+	return fireList"""
+	for i in range(len(matrix)):
+		#for j in range(len(matrix[i])):
+		if ((matrix[i]+bias)>=threshold):
+			fireList.append(1)
+		else: 
+			fireList.append(0)
 	return fireList
 
-def fireOut(hiddenOutM, fireList):
-	matrixOutFire=np.matmul(hiddenOutM, fireList)
-	return matrixOutFire
+def outCalc(M1, M2, bias):
+	matrix = np.matmul(M1,M2)
+	for i in range(len(matrix)):
+		matrix[i] = matrix[i] + bias
+	return matrix
 
-def calcError(outList, outVector):
+def matrixAdd(M1, M2):
+	matrixOut=np.add(M1, M2)
+	return matrixOut
+
+def calcError(outList, outVector, learningRate):
 	error = np.empty([len(outList)], dtype = float)
 	i=0
 	while i < len(outList):
 		if(outList[i] != outVector[i]):
-			error[i]=pow(((math.pi*outVector[i])-(math.pi*outList[i])),2)
+			error[i]=((outVector[i])-(outList[i])) * learningRate
 			i=i+1
 		else:
 			error[i]=0
 			i=i+1
 	return error
-
-
-
 
 if __name__ == '__main__':
 	main()
