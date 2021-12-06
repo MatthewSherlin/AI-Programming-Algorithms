@@ -1,68 +1,45 @@
+#program takes an input of vector, output, perceptrons, bias, learning rate, and threshold and outputs an output vector of size sizeOut
+
 import os
 import sys
 import random
 import numpy as np
 
-sizeIN = 0
-sizeOUT = 0
-seqInputVectors=[]
-seqOutputVectors=[]
-thresholdFire=0
-thresholdError=0
-maxCount=0
 
 def main():
-
-    #reading in size of input vector
-    file = open("textFiles\inputVector.txt", "r")
-    data = file.read().replace(" ", "")
-    sizeIN=len(data)
+    #getting inputs needed
+    #bias=float(input("Give the perceptron bias: "))
+    #learningRate=float(input("Please provide the learning rate between 0 and 1: "))
+    #threshold=float(input("Please provide the threshold value: "))
+    sizeIn=int(input("Please provide size of input vectors: "))
+    sizePercep=int(input("Please provide number of perceptrons: "))
+    sizeOut=int(input("Please provide size of output vectors: "))
     
-    #reading in size of output vector
-    file = open("textFiles\outputVector.txt", "r")
-    data = file.read().replace(" ", "")
-    sizeOUT=len(data)
+
+    
+    #settings rows and columns
+    rows, cols = (sizeIn, sizePercep)
+    rows2, cols2 = (sizeOut, sizePercep)
+    #creating matricies
+    inputHiddenMatrix = [[0.0]* cols] * rows
+    hiddenOutputMatrix = [[0.0]* cols2] * rows2
+    
+    for row in range(sizeIn):
+        for col in range(sizePercep):
+            inputHiddenMatrix[col][row]=random.randrange(-1, 1)
+
+    for row in range(sizePercep):
+        for col in range(sizeOut):
+            inputHiddenMatrix[row][col]=random.randrange(-1, 1)
+    
+    print(inputHiddenMatrix)
 
 
-    numPerc=float(input("Give number of perceptrons in each hidden layer: "))
-    numHidden=float(input("Give the number of hidden layers: "))
-    bias=float(input("Give the perceptron bias: "))
-    cycle=float(input("Give cycles to be repeated: "))
-    learnRate=float(input("Please provide the learning rate between 0 and 1: "))
-    matrix1 = create_random_matrix(sizeIN, numPerc)
-    matrix2 = create_random_matrix(numPerc, sizeOUT)
-    i=2
+
+    
     
     return
 
-#create random matrix
-def create_random_matrix(matrix, numRow, numCol):
-    matrix = np.zeros(shape=(numRow,numCol))
-    for i in range(numRow):
-        for j in range(numCol):
-            matrix[i][j] = random.randrange(-1,1)
-        return matrix
-
-def threshold_fire(cumVector, thresholdFire):
-    cumOutVector=[]
-    for i in range(cumVector): ##fix this for loop |v|
-        if cumVector[i] > thresholdFire:
-            cumOutVector[i]=1
-        else:
-            cumOutVector[i]=0
-
-
-def create_vector_bias(biasValue, vectorSize):
-    i=0
-    biasVector = []
-    while i <= vectorSize:
-        biasVector[i]=biasValue
-
-
-def adjust_weight(numLayers, seqMatrixes, targetVector, actualVector, errorE, errorThreshold, learningRate):
-    count = 1
-    while errorE > errorThreshold and count <= maxCount:
-        return 
 
 
 if __name__ == '__main__':

@@ -1,11 +1,5 @@
-import os
-import sys
 import math
-from math import dist
-from math import sqrt
 import random
-import numpy as np
-import copy
 
 #initializing variables
 numClusters=0   
@@ -14,8 +8,6 @@ maxShift=0
 maxLoop=0
 xVals = []
 yVals = []
-points = []
-radius = 0
 counter = 0
 stabilized = True
 centroidX=[]
@@ -59,7 +51,7 @@ def main():
     #big while loop that clusters
     while counter < maxLoop and stabilized == False:
         #these variables could do with being delcared before the while loop or before the function uses them to improve readability
-        clusterX=[[] for _ in range(numClusters)]
+        clusterX=[[] for _ in range(numClusters)] #declaring a list of lists with size numCluster
         clusterY=[[] for _ in range(numClusters)]
         pointArr=[]
         distArr = []
