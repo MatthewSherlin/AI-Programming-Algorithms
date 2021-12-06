@@ -1,4 +1,5 @@
 from itertools import product
+import numpy as np
 
 #set states and emission vectors. Remain with A- and X-
 states=['A','B','C']
