@@ -78,15 +78,15 @@ def valid_transitions(states, matrix, probVector):
     j=0
     path_possible=True
     #set inital probability vector to first state
-    if(states[0] == 'A' | states[0] == 's1'):
+    if(states[0] == 'A'):
         j=probVector[0]
-    if(states[0] == 'B' | states[0] == 's2'):
+    if(states[0] == 'B'):
         j=probVector[1]
-    if(states[0] == 'C' | states[0] == 's3'):
+    if(states[0] == 'C'):
         j=probVector[2]
-    if(states[0] == 'D' | states[0] == 's4'):
+    if(states[0] == 'D'):
         j=probVector[3]
-    if(states[0] == 'E' | states[0] == 's5'):
+    if(states[0] == 'E'):
         j=probVector[4]
 
     #if inital prob vector value is 0.0, false
@@ -113,15 +113,15 @@ def valid_transitions(states, matrix, probVector):
 def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions):
     #getting the initial probability number
     init = 0
-    if(set[0] == 'A' | states[0] == 's1'):
+    if(set[0] == 'A'):
         init=probVector[0]
-    if(set[0] == 'B' | states[0] == 's2'):
+    if(set[0] == 'B' ):
         init=probVector[1]
-    if(set[0] == 'C' | states[0] == 's3'):
+    if(set[0] == 'C'):
         init=probVector[2]
-    if(set[0] == 'D' | states[0] == 's4'):
+    if(set[0] == 'D'):
         init=probVector[3]
-    if(set[0] == 'E' | states[0] == 's5'):
+    if(set[0] == 'E'):
         init=probVector[4]
 
     #getting the multiplication values from transition matrix and emission matrix
