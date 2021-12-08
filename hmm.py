@@ -1,27 +1,43 @@
 from itertools import product
 import numpy as np
+import random
 
-#set states and emission vectors. Remain with A- and X-
-states=['A','B','C']
-emissions=['X','Y','Z']
+#initializing states and emission vectors. Remains with A- and X-
+states=[]
+emissions=[]
 
-#setting transition matrix and emission matrix
-transitionMatrix=[[0.9, 0.0, 0.5], #A
-                  [0.0, 0.5, 0.2], #B
-                  [0.1, 0.5, 0.3]] #C
-                 #  A    B    C 
+#initializing transition matrix and emission matrix
+transitionMatrix=[]
+emissionMatrix=[]
 
-                # X    Y    Z
-emissionMatrix=[[0.6, 0.3, 0.1], #A
-                [0.1, 0.7, 0.2], #B
-                [0.2, 0.3, 0.5]] #C
-
-#setting probability vector
-probVector=[0.0, 0.2, 0.4]
+#initializing probability vector
+probVector=[]
 sequenceEmissions = []
 
 #main driver
 def main():
+    statesNum=int(input("Enter in number of inital states: "))
+    emissionsNum=int(input("Enter in number of emissions: "))
+    
+    for x in range(statesNum):
+        states.append(possibleStates[x])
+    for x in range(emissionsNum):
+        emissions.append(possibleEmissions[x])
+    for x in range(statesNum):
+        print("Enter in inital probabilities (", x+1, '/', statesNum, "):")
+        value=float(input())
+        probVector.append(value)
+    
+    print("States:", states, "Emissions:", emissions, "Probability Vector:", probVector)
+
+    transitionMatrix = np.random.rand(statesNum,statesNum)
+    transitionMatrix=transitionMatrix/transitionMatrix.sum(axis=1)[:,None]
+    print("Random Transition Matrix:\n",transitionMatrix)
+    emissionMatrix = np.random.rand(emissionsNum, statesNum)
+    emissionMatrix=emissionMatrix/emissionMatrix.sum(axis=1)[:,None]
+    print("Random Emission Matrix:\n",emissionMatrix)
+
+
     get_path = True
     while(get_path):
         #get emission sequence from user
@@ -30,7 +46,15 @@ def main():
         if(valid_emission(sequenceEmissions, emissions) == True):
             print("All possible paths: ")
             #cartesian product to get all possible paths
-            s3 = list(product(states, states, states))
+            s3 = []
+            if(len(states) == 2):
+                s3 = list(product(states, states))
+            if(len(states) == 3):
+                s3 = list(product(states, states, states))
+            if(len(states) == 4):
+                s3 = list(product(states, states, states, states))
+            if(len(states) == 5):
+                s3 = list(product(states, states, states, states, states))
             print(s3)
             probablePaths = []
             deletedPaths = []
@@ -46,14 +70,14 @@ def main():
             #for each path in the probable paths, calculate probability and if it is higher than max, replace it
             for set in probablePaths:
                 probability = path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions)
-                if(probability==0):
+                if(probability==0.0):
                     deletedPaths.append(set)
                 else:
                     print("Next probable sequence is:", set, "with a probability of:", probability)
                 if(maxProb[1] < probability):
                     maxProb = (set, probability)
             #finally, print the highest probability
-            print("\nSequences",deletedPaths," were removed. Probability was 0.0")
+            print("\nSequences with probability of 0.0 were removed.")
             print("\nMost probable sequence is:", maxProb[0], "with a probability of:", maxProb[1], "\n")
         else:
             print("Emission sequence is invalid. Exiting...")
@@ -63,7 +87,7 @@ def main():
 #check if emissions are valid. Making sure that user is inputting characters that exist in the vector
 def valid_emission(setEmissions, emissions):
     #if too many emissions are added, false
-    if(len(probVector) != len(states)):
+    if(range(len(probVector))) != range((len(states))):
         return False 
     #if the characters are incorrect, false
     for ch in setEmissions:
@@ -88,6 +112,11 @@ def valid_transitions(states, matrix, probVector):
         j=probVector[3]
     if(states[0] == 'E'):
         j=probVector[4]
+    if(states[0] == 'F'):
+        j=probVector[5]
+    if(states[0] == 'G'):
+        j=probVector[6]
+    # ...
 
     #if inital prob vector value is 0.0, false
     if (j <= 0.0 ):
@@ -123,33 +152,49 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
         init=probVector[3]
     if(set[0] == 'E'):
         init=probVector[4]
+    if(set[0] == 'F'):
+        init=probVector[5]
+    if(set[0] == 'G'):
+        init=probVector[6]
+    # ...
 
     #getting the multiplication values from transition matrix and emission matrix
     # [A,B,A] A->B -> transitionMatrix[0][1]
-    var1 = transitionMatrix[states.index(set[0])][states.index(set[1])]
-    var2 = transitionMatrix[states.index(set[1])][states.index(set[2])]
-    em1 = emissionMatrix[states.index(set[0])][emissions.index(sequenceEmissions[0])]
-    em2 = emissionMatrix[states.index(set[1])][emissions.index(sequenceEmissions[1])]
-    em3 = emissionMatrix[states.index(set[2])][emissions.index(sequenceEmissions[2])]
-    #case if length of intial states is A-D
-    if(len(states)==4):
-        var3=transitionMatrix[states.index(set[2])][states.index(set[3])]
-        em4=emissionMatrix[states.index(set[3])][emissions.index(sequenceEmissions[3])]
-        finalSum = init*var1*var2*var3*em1*em2*em3*em4
-        return finalSum
-    #case if length of intial states is A-E
-    if(len(states)==5):
-        var3=transitionMatrix[states.index(set[2])][states.index(set[3])]
-        em4=emissionMatrix[states.index(set[3])][emissions.index(sequenceEmissions[3])]
-        var4=transitionMatrix[states.index(set[3])][states.index(set[4])]
-        em5=emissionMatrix[states.index(set[4])][emissions.index(sequenceEmissions[4])]
-        finalSum = init*var1*var2*var3*var4*em1*em2*em3*em4*em5
-        return finalSum
+    varArray=[]
+    emArray=[]
+    finalSum=init
 
-    #getting the final probability sum and returning it
-    finalSum = init * var1 * var2 * em1 * em2 * em3
+    #get all of the state amounts
+    for x in range(len(states)):
+        varArray.append(transitionMatrix[states.index(set[x-1])][states.index(set[x])])
+    #get all of the emissions amounts
+    for x in range(len(emissions)):
+        emArray.append(emissionMatrix[states.index(set[x-1])][emissions.index(sequenceEmissions[x-1])])
+    #multiply all together
+    for x in range(len(varArray)):
+        finalSum = finalSum * varArray[x-1]
+    for x in range(len(emArray)):
+        finalSum = finalSum * emArray[x-1]
+    
     return finalSum
 
+
+## End functionality
+#################################
+
+
+
+
+
+
+
+
+
+
+
+
+possibleStates=['A', 'B', 'C', 'D', 'E', 'F', 'G']
+possibleEmissions=['X', 'Y', 'Z', 'W', 'V', 'R', 'S']
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
-import os
-import sys
+import matplotlib.pyplot as plt
+import numpy as np
 
 def func(numPoints, xVals, yVals):
         #sum of x points and mean
@@ -44,6 +44,18 @@ def func(numPoints, xVals, yVals):
         
         print("The slope of the points is", slope, "and the y-intercept of the points is", intercept)
         print("y=", slope,"x +", intercept)
+
+        plt.style.use('_mpl-gallery')
+        x=np.linspace(-5,5,100)
+        y= (slope*x+intercept)
+        plt.plot(x,y, '-r', label='y=mx+b')
+        plt.title('Plotted Points')
+        plt.xlabel('x', color='#1C2833')
+        plt.ylabel('y', color='#1C2833')
+        plt.legend(loc='upper left')
+        plt.grid()
+        plt.show()
+
 
 def main():
     xVals=[]
