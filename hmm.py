@@ -78,6 +78,8 @@ def main():
                 if(maxProb[1] < probability):
                     maxProb = (set, probability)
             #finally, print the highest probability
+            if(deletedPaths):
+                print("\nSequences ", deletedPaths, "were removed.")
             print("\nSequences with probability of 0.0 were removed.")
             print("\nMost probable sequence is:", maxProb[0], "with a probability of:", maxProb[1], "\n")
         else:
