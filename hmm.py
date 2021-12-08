@@ -14,6 +14,7 @@ emissionMatrix=[]
 probVector=[]
 sequenceEmissions = []
 
+
 #main driver
 def main():
     statesNum=int(input("Enter in number of inital states: "))
@@ -69,7 +70,7 @@ def main():
             maxProb = ['', 0.0]
             #for each path in the probable paths, calculate probability and if it is higher than max, replace it
             for set in probablePaths:
-                probability = path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions)
+                probability = path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions, statesNum, emissionsNum)
                 if(probability==0.0):
                     deletedPaths.append(set)
                 else:
@@ -139,7 +140,7 @@ def valid_transitions(states, matrix, probVector):
         return False
 
 
-def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions):
+def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions, statesNum, emissionsNum):
     #getting the initial probability number
     init = 0
     if(set[0] == 'A'):
@@ -165,11 +166,11 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
     finalSum=init
 
     #get all of the state amounts
-    for x in range(len(states)):
+    for x in range(statesNum):
         varArray.append(transitionMatrix[states.index(set[x-1])][states.index(set[x])])
     #get all of the emissions amounts
-    for x in range(len(emissions)):
-        emArray.append(emissionMatrix[states.index(set[x-1])][emissions.index(sequenceEmissions[x-1])])
+    for x in range(emissionsNum):
+        emArray.append(emissionMatrix[emissions.index(sequenceEmissions[x-1])][states.index(set[x-1])])
     #multiply all together
     for x in range(len(varArray)):
         finalSum = finalSum * varArray[x-1]
@@ -181,6 +182,9 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
 
 ## End functionality
 #################################
+
+
+
 
 
 
