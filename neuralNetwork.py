@@ -2,68 +2,136 @@ import os
 import sys
 import random
 import numpy as np
+import math
 
-sizeIN = 0
-sizeOUT = 0
-seqInputVectors=[]
-seqOutputVectors=[]
-thresholdFire=0
-thresholdError=0
-maxCount=0
+xVals = []
+yVals = []
+points = []
 
 def main():
 
-    #reading in size of input vector
-    file = open("textFiles\inputVector.txt", "r")
-    data = file.read().replace(" ", "")
-    sizeIN=len(data)
+	nIn=int(input("Please provide size of input vectors: "))
+	nPercep=int(input("Please provide number of perceptrons: "))
+	nOut=int(input("Please provide size of output vectors: "))
+	learningRate=float(input("Please learning rate: "))
+	bias=float(input("Please provide bias: "))
+	threshold=float(input("Please provide perceptron threshold: "))
+	outVector= list(map(int, input("Enter the output vector: ").strip().split()))
+	print(outVector)
+	"""if(len(outVector) != len(nOut)):
+		print("Output vector is too long.")
+		exit()"""
+
+	print("\n")
+
+	#generating matrixes
+	inHiddenM = genInputHiddenMatrix(nIn, nPercep)
+	hiddenOutM = genHiddenOutputMatrix(nOut, nPercep)
+	print("\n")
+	
+	loop = 0
+	while loop < 100:
+		#prints loop num
+		print("Loop: ", loop+1)
+
+		#generating initial vector
+		inVect = generateInputVector(nIn)
+		print("initial vect: ", inVect)
+
+		#generating value of hidden layer perceptrons
+		percepList=fireCalc(inVect, inHiddenM, bias, threshold)
+		print("Perceptron list is:", percepList)
+
+		#generating output value
+		outList = outCalc(percepList, hiddenOutM, bias)
+		print("Output list is:", outList)
+
+		#error calculation
+		error=calcError(outList,outVector, learningRate)
+		print("Error list: ",error)
+		totalError = np.sum(error)
+		if totalError == 0:
+			print("Actual output achieved on loop: ", loop+1)
+			exit()
+
+		#weight adjustment
+		inHiddenM = matrixAdd(inHiddenM, error)
+		hiddenOutM = matrixAdd(hiddenOutM, error)
+		print("input to hidden matrix after weight change: \n", inHiddenM)
+		print("hidden to output matrix after weight change: \n", hiddenOutM)
+		print("\n")
+		loop = loop + 1
+
+
     
-    #reading in size of output vector
-    file = open("textFiles\outputVector.txt", "r")
-    data = file.read().replace(" ", "")
-    sizeOUT=len(data)
+#initializing input to hidden layer matrix with random weights between -1 and 1
+def genInputHiddenMatrix(n, m):
+	inputM = np.zeros((n, m), dtype = float)
+	for row in range(n):
+		for col in range(m):
+			inputM[row][col] = (random.randrange(-10,10)/10)
+	print("input to hidden matrix")
+	print(inputM)
+	return inputM
 
+#initializing hidden to output layer matrix with random weights between -1 and 1
+def genHiddenOutputMatrix(n, m):
+	outputM = np.zeros((n, m), dtype = float)
+	for row in range(n):
+		for col in range(m):
+			outputM[row][col] = (random.randrange(-10,10)/10)
+	print("\n")
+	print("hidden to output matrix")
+	print(outputM)
+	return outputM
 
-    numPerc=float(input("Give number of perceptrons in each hidden layer: "))
-    numHidden=float(input("Give the number of hidden layers: "))
-    bias=float(input("Give the perceptron bias: "))
-    cycle=float(input("Give cycles to be repeated: "))
-    learnRate=float(input("Please provide the learning rate between 0 and 1: "))
-    matrix1 = create_random_matrix(sizeIN, numPerc)
-    matrix2 = create_random_matrix(numPerc, sizeOUT)
-    i=2
-    
-    return
+def generateInputVector(n):
+	inVect = np.empty([n], dtype = float)
+	for i in range(n):
+		inVect[i] = random.randrange(0,2)
+	return inVect
 
-#create random matrix
-def create_random_matrix(matrix, numRow, numCol):
-    matrix = np.zeros(shape=(numRow,numCol))
-    for i in range(numRow):
-        for j in range(numCol):
-            matrix[i][j] = random.randrange(-1,1)
-        return matrix
+def fireCalc(inVect, inMatrix, bias, threshold):
+	matrix=np.matmul(inVect, inMatrix)
+	fireList=[]
+	i=0
+	"""while i < len(matrix):
+		if((matrix[i]+bias)>=threshold):
+			fireList.append(1)
+			i=i+1
+		else:
+			fireList.append(0)
+			i=i+1
+	return fireList"""
+	for i in range(len(matrix)):
+		#for j in range(len(matrix[i])):
+		if ((matrix[i]+bias)>=threshold):
+			fireList.append(1)
+		else: 
+			fireList.append(0)
+	return fireList
 
-def threshold_fire(cumVector, thresholdFire):
-    cumOutVector=[]
-    for i in range(cumVector): ##fix this for loop |v|
-        if cumVector[i] > thresholdFire:
-            cumOutVector[i]=1
-        else:
-            cumOutVector[i]=0
+def outCalc(M1, M2, bias):
+	matrix = np.matmul(M1,M2)
+	for i in range(len(matrix)):
+		matrix[i] = matrix[i] + bias
+	return matrix
 
+def matrixAdd(M1, M2):
+	matrixOut=np.add(M1, M2)
+	return matrixOut
 
-def create_vector_bias(biasValue, vectorSize):
-    i=0
-    biasVector = []
-    while i <= vectorSize:
-        biasVector[i]=biasValue
-
-
-def adjust_weight(numLayers, seqMatrixes, targetVector, actualVector, errorE, errorThreshold, learningRate):
-    count = 1
-    while errorE > errorThreshold and count <= maxCount:
-        return 
-
+def calcError(outList, outVector, learningRate):
+	error = np.empty([len(outList)], dtype = float)
+	i=0
+	while i < len(outList):
+		if(outList[i] != outVector[i]):
+			error[i]=((outVector[i])-(outList[i])) * learningRate
+			i=i+1
+		else:
+			error[i]=0
+			i=i+1
+	return error
 
 if __name__ == '__main__':
-    main()
+	main()
