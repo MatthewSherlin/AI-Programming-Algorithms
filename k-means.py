@@ -1,6 +1,8 @@
 import math
 import random
-import matplotlib as plt
+import matplotlib.pyplot as plt
+import numpy as np
+import random
 
 #initializing variables
 numClusters=0   
@@ -26,6 +28,13 @@ def main():
     print("Points: ", points)
     #print("xValues: ",xVals)
     #print("yValues: ",yVals)
+
+    plt.plot(xVals, yVals, 'k.', label='points')
+    plt.axis([0, 100, 0, 100])
+        ##for i, j in zip(xVals, yVals):
+            ##plt.text(i, j+0.5, '({}, {})'.format(i, j))
+    plt.title('Graph of Points')
+    plt.show()
 
     #input number of clusters
     numClusters=int(input("Enter in number of clusters: "))
@@ -131,6 +140,17 @@ def main():
         counter = counter + 1
         if counter == maxLoop:
             print("Max Loop reached, exitng")
+        
+        for i in range(numClusters):
+            plt.plot(centroidX[i], centroidY[i], marker='*', markersize=7, label='points', color=colors[i]) #plot of the cluster
+            plt.text(centroidX[i], centroidY[i]+0.5, '({}, {})'.format(centroidX[i], centroidY[i]))
+            for j in range(len(clusterX[i])):
+                plt.plot(clusterX[i][j], clusterY[i][j], '.', label='points', color=colors[i]) #plot of the points in clusters
+        for i in range(len(outliersX)):
+            plt.plot(outliersX[i], outliersY[i], 'r.', label='points', color='k')
+        plt.axis([0, 100, 0, 100])
+        plt.title('Graph of Clusters')
+        plt.show()
 
     #printing outlier values
     print("Outliers xy values: ", outliersXY)
@@ -184,6 +204,7 @@ class pointdist:
         index = self.distNum.index(minDist)
         return minDist, index
 
+colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
 
 if __name__ == '__main__':
     main()

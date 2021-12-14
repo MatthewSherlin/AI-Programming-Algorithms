@@ -46,7 +46,7 @@ def func(numPoints, xVals, yVals):
         print("y=", slope,"x +", intercept)
 
         #printing points first
-        plt.plot(xVals, yVals, 'r*', label='points')
+        plt.plot(xVals, yVals, 'r.', label='points')
         plt.axis([0, 20, 0, 20])
         for i, j in zip(xVals, yVals):
             plt.text(i, j+0.5, '({}, {})'.format(i, j))
@@ -57,7 +57,7 @@ def func(numPoints, xVals, yVals):
         x = np.linspace(0,25,100)
         y = slope*x+intercept
         plt.plot(x, y, '-r', label='slope intercept form')
-        plt.plot(xVals, yVals, 'r*')
+        plt.plot(xVals, yVals, 'r.')
         plt.axis([0, 10, 0, 10])
         for i, j in zip(xVals, yVals):
             plt.text(i, j+0.5, '({}, {})'.format(i, j))
