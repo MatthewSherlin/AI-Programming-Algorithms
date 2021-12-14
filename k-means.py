@@ -1,6 +1,6 @@
 import math
 import random
-import matplotlib.pyplot as plt
+import matplotlib as plt
 
 #initializing variables
 numClusters=0   
@@ -28,19 +28,19 @@ def main():
     #print("yValues: ",yVals)
 
     #input number of clusters
-    numClusters=3#int(input("Enter in number of clusters: "))
+    numClusters=int(input("Enter in number of clusters: "))
     print("Number of Clusters:", numClusters, "\n")
 
     #input maximum shift threshold value
-    maxShift=.5#float(input("Enter in maximum centroid shift threshold: "))
+    maxShift=float(input("Enter in maximum centroid shift threshold: "))
     print("Maximum shift:", maxShift, "\n")
 
     #input threshold value
-    radius=10#int(input("Enter in centroid radius: "))
+    radius=int(input("Enter in centroid radius: "))
     print("Radius: ", radius, "\n")
 
     #input max loops
-    maxLoop=3#float(input("Enter in maximum amount of loops: "))
+    maxLoop=float(input("Enter in maximum amount of loops: "))
     print("Maximum loops:", maxLoop, "\n")
 
     #call generate_seed_points(points, num clusters)
@@ -84,7 +84,8 @@ def main():
                 #print("current point(x,y): ", xVals[i], yVals[i], "current centroid(x,y): ", centroidX[j], centroidY[j], "tempDist: ", tempDist)
             tp = pointdist(xVals[i], yVals[i], distArr)
             pointArr.append(tp)
-            
+
+        #clearing outliers    
         outliersXY.clear()
         outliersX.clear()
         outliersY.clear()
@@ -159,20 +160,25 @@ def distCalc(x,y,x1,y1):
     return temp
 
 class pointdist:
+    #default constructor
     def __init__(self, x, y, dist):
             self.x = x
             self.y = y
             self.distNum = dist
 
+    #returns pointdist obj
     def printData(self):
         print("(x,y): ", self.x, self.y,"distance: ", self.distNum)
 
+    #returns x value
     def getX(self):
         return self.x
 
+    #returns y value
     def getY(self):
         return self.y
 
+    #returns the minumum distance and the index of where the minimum distance is at
     def getIndex(self):
         minDist = min(self.distNum)
         index = self.distNum.index(minDist)
