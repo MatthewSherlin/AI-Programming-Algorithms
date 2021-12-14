@@ -45,11 +45,23 @@ def func(numPoints, xVals, yVals):
         print("The slope of the points is", slope, "and the y-intercept of the points is", intercept)
         print("y=", slope,"x +", intercept)
 
-        plt.style.use('_mpl-gallery')
-        x=np.linspace(-5,5,100)
-        y= (slope*x+intercept)
-        plt.plot(x,y, '-r', label='y=mx+b')
-        plt.title('Plotted Points')
+        #printing points first
+        plt.plot(xVals, yVals, 'r*', label='points')
+        plt.axis([0, 20, 0, 20])
+        for i, j in zip(xVals, yVals):
+            plt.text(i, j+0.5, '({}, {})'.format(i, j))
+        plt.title('Graph of Points')
+        plt.show()
+
+        #printing slope intercept form
+        x = np.linspace(0,25,100)
+        y = slope*x+intercept
+        plt.plot(x, y, '-r', label='slope intercept form')
+        plt.plot(xVals, yVals, 'r*')
+        plt.axis([0, 10, 0, 10])
+        for i, j in zip(xVals, yVals):
+            plt.text(i, j+0.5, '({}, {})'.format(i, j))
+        plt.title('Graph w/ Given Points')
         plt.xlabel('x', color='#1C2833')
         plt.ylabel('y', color='#1C2833')
         plt.legend(loc='upper left')

@@ -119,6 +119,8 @@ def valid_transitions(states, matrix, probVector):
         j=probVector[5]
     if(states[0] == 'G'):
         j=probVector[6]
+    if(states[0] == 'H'):
+        j=probVector[7]
     # ...
 
     #if inital prob vector value is 0.0, false
@@ -159,6 +161,8 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
         init=probVector[5]
     if(set[0] == 'G'):
         init=probVector[6]
+    if(set[0] == 'H'):
+        init=probVector[7]
     # ...
 
     #getting the multiplication values from transition matrix and emission matrix
@@ -181,26 +185,16 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
     
     return finalSum
 
-
-## End functionality
-#################################
-
+#############################################################
+## End Functionality
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-possibleStates=['A', 'B', 'C', 'D', 'E', 'F', 'G']
-possibleEmissions=['X', 'Y', 'Z', 'W', 'V', 'R', 'S']
+possibleStates=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+possibleEmissions=['X', 'Y', 'Z', 'W', 'V', 'R', 'S', 'T']
 
 if __name__ == '__main__':
     main()
