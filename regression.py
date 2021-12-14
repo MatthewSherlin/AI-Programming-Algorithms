@@ -1,20 +1,18 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import os
+import sys
 
 def func(numPoints, xVals, yVals):
         #sum of x points and mean
         sumX=0
         for x in xVals:
             sumX += x
-        meanX = sumX/numPoints
-        print("Mean of x-values:", meanX) 
+        meanX = sumX/numPoints 
 
         #sum of y points and mean
         sumY=0
         for y in yVals:
             sumY += y
         meanY = sumY/numPoints
-        print("Mean of y-values:", meanX) 
         
         #variance
         def variance(xVals, numPoints):
@@ -32,9 +30,6 @@ def func(numPoints, xVals, yVals):
             denom = numPoints - 1
             covar = num/denom
             return covar
-
-        print("Variance: ", variance(xVals, numPoints))
-        print("Covariance: ", covariance(xVals, meanX, meanY, yVals, numPoints))
             
         #slope    
         slope = covariance(xVals, meanX, meanY, yVals, numPoints)/variance(xVals, numPoints)
@@ -45,31 +40,16 @@ def func(numPoints, xVals, yVals):
         print("The slope of the points is", slope, "and the y-intercept of the points is", intercept)
         print("y=", slope,"x +", intercept)
 
-        plt.style.use('_mpl-gallery')
-        x=np.linspace(-5,5,100)
-        y= (slope*x+intercept)
-        plt.plot(x,y, '-r', label='y=mx+b')
-        plt.title('Plotted Points')
-        plt.xlabel('x', color='#1C2833')
-        plt.ylabel('y', color='#1C2833')
-        plt.legend(loc='upper left')
-        plt.grid()
-        plt.show()
-
-
 def main():
-    xVals=[]
-    yVals=[]
-    print("List of values input from text file.")
-    with open('textFiles\RegressionPts.txt') as f:
-        for line in f:
-            row = line.split()
-            xVals.append(int(row[0]))
-            yVals.append(int(row[1]))
-   
-    for i in range(len(xVals)):
-        print("Points:(",xVals[i],",",yVals[i],")")
-    
+    print("Enter list of x values separated by spaces")
+    # store in x values
+    str_arr = input().split(' ') #will take in a string of numbers separated by a space
+    xVals = [int(num) for num in str_arr]
+
+    print("Enter list of y values separated by spaces")
+    # store in y values
+    str_arr2 = input().split(' ') #will take in a string of numbers separated by a space
+    yVals = [int(num2) for num2 in str_arr2] 
 
     numPoints = len(xVals)
     if(len(xVals) != len(yVals)): 
