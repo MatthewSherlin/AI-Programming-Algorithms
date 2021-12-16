@@ -147,7 +147,7 @@ def main():
             for j in range(len(clusterX[i])):
                 plt.plot(clusterX[i][j], clusterY[i][j], '.', label='points', color=colors[i]) #plot of the points in clusters
         for i in range(len(outliersX)):
-            plt.plot(outliersX[i], outliersY[i], 'r.', label='points', color='k')
+            plt.plot(outliersX[i], outliersY[i], '.', label='points', color='k')
         plt.axis([0, 100, 0, 100])
         plt.title('Graph of Clusters')
         plt.show()

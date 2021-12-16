@@ -30,7 +30,7 @@ def main():
 	print("\n")
 	
 	loop = 0
-	while loop < 100:
+	while loop < 10:
 		#prints loop num
 		print("Loop: ", loop+1)
 

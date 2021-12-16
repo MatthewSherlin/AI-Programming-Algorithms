@@ -48,14 +48,22 @@ def main():
             print("All possible paths: ")
             #cartesian product to get all possible paths
             s3 = []
-            if(len(states) == 2):
-                s3 = list(product(states, states))
-            if(len(states) == 3):
-                s3 = list(product(states, states, states))
-            if(len(states) == 4):
-                s3 = list(product(states, states, states, states))
-            if(len(states) == 5):
-                s3 = list(product(states, states, states, states, states))
+            count =1
+            while(count==1):
+                if(len(states) == 2):
+                    s3 = list(product(states, states))
+                if(len(states) == 3):
+                    s3 = list(product(states, states, states))
+                if(len(states) == 4):
+                    s3 = list(product(states, states, states, states))
+                if(len(states) == 5):
+                    s3 = list(product(states, states, states, states, states))
+                if(len(states) == 6):
+                    s3 = list(product(states, states, states, states, states, states))
+                if(len(states) == 7):
+                    s3 = list(product(states, states, states, states, states, states, states))
+                #...
+                count=0
             print(s3)
             probablePaths = []
             deletedPaths = []
@@ -103,25 +111,28 @@ def valid_transitions(states, matrix, probVector):
     n = len(states)
     m=1
     j=0
+    count=1
     path_possible=True
     #set inital probability vector to first state
-    if(states[0] == 'A'):
-        j=probVector[0]
-    if(states[0] == 'B'):
-        j=probVector[1]
-    if(states[0] == 'C'):
-        j=probVector[2]
-    if(states[0] == 'D'):
-        j=probVector[3]
-    if(states[0] == 'E'):
-        j=probVector[4]
-    if(states[0] == 'F'):
-        j=probVector[5]
-    if(states[0] == 'G'):
-        j=probVector[6]
-    if(states[0] == 'H'):
-        j=probVector[7]
-    # ...
+    while(count ==1):
+        if(states[0] == 'A'):
+            j=probVector[0]
+        if(states[0] == 'B'):
+            j=probVector[1]
+        if(states[0] == 'C'):
+            j=probVector[2]
+        if(states[0] == 'D'):
+            j=probVector[3]
+        if(states[0] == 'E'):
+            j=probVector[4]
+        if(states[0] == 'F'):
+            j=probVector[5]
+        if(states[0] == 'G'):
+            j=probVector[6]
+        if(states[0] == 'H'):
+            j=probVector[7]
+        # ...
+        count=0
 
     #if inital prob vector value is 0.0, false
     if (j <= 0.0 ):
@@ -147,23 +158,26 @@ def valid_transitions(states, matrix, probVector):
 def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequenceEmissions, statesNum, emissionsNum):
     #getting the initial probability number
     init = 0
-    if(set[0] == 'A'):
-        init=probVector[0]
-    if(set[0] == 'B' ):
-        init=probVector[1]
-    if(set[0] == 'C'):
-        init=probVector[2]
-    if(set[0] == 'D'):
-        init=probVector[3]
-    if(set[0] == 'E'):
-        init=probVector[4]
-    if(set[0] == 'F'):
-        init=probVector[5]
-    if(set[0] == 'G'):
-        init=probVector[6]
-    if(set[0] == 'H'):
-        init=probVector[7]
-    # ...
+    count=1
+    while(count==1):
+        if(set[0] == 'A'):
+            init=probVector[0]
+        if(set[0] == 'B' ):
+            init=probVector[1]
+        if(set[0] == 'C'):
+            init=probVector[2]
+        if(set[0] == 'D'):
+            init=probVector[3]
+        if(set[0] == 'E'):
+            init=probVector[4]
+        if(set[0] == 'F'):
+            init=probVector[5]
+        if(set[0] == 'G'):
+            init=probVector[6]
+        if(set[0] == 'H'):
+            init=probVector[7]
+        # ...
+        count=0
 
     #getting the multiplication values from transition matrix and emission matrix
     # [A,B,A] A->B -> transitionMatrix[0][1]
