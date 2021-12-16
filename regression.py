@@ -58,7 +58,7 @@ def func(numPoints, xVals, yVals):
         y = slope*x+intercept
         plt.plot(x, y, '-r', label='slope intercept form')
         plt.plot(xVals, yVals, 'r.')
-        plt.axis([0, 10, 0, 10])
+        plt.axis([0, 20, 0, 20])
         for i, j in zip(xVals, yVals):
             plt.text(i, j+0.5, '({}, {})'.format(i, j))
         plt.title('Graph w/ Given Points')
