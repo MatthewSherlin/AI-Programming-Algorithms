@@ -30,7 +30,7 @@ def main():
 	print("\n")
 	
 	loop = 0
-	while loop < 10:
+	while loop < 500:
 		#prints loop num
 		print("Loop: ", loop+1)
 
@@ -95,14 +95,6 @@ def fireCalc(inVect, inMatrix, bias, threshold):
 	matrix=np.matmul(inVect, inMatrix)
 	fireList=[]
 	i=0
-	"""while i < len(matrix):
-		if((matrix[i]+bias)>=threshold):
-			fireList.append(1)
-			i=i+1
-		else:
-			fireList.append(0)
-			i=i+1
-	return fireList"""
 	for i in range(len(matrix)):
 		#for j in range(len(matrix[i])):
 		if ((matrix[i]+bias)>=threshold):
