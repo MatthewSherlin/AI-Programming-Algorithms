@@ -48,6 +48,7 @@ def main():
             #cartesian product to get all possible paths
             s3 = []
             count =1
+            #limit to 7 states
             while(count==1):
                 if(len(states) == 2):
                     s3 = list(product(states, states))
@@ -200,11 +201,6 @@ def path_probability(set, transitionMatrix, emissionMatrix, probVector, sequence
 
 #############################################################
 ## End Functionality
-
-
-
-
-
 
 possibleStates=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 possibleEmissions=['X', 'Y', 'Z', 'W', 'V', 'R', 'S', 'T']

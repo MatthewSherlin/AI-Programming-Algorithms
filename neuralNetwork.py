@@ -15,9 +15,6 @@ def main():
 	threshold=float(input("Please provide perceptron threshold: "))
 	outVector= list(map(int, input("Enter the output vector: ").strip().split()))
 	print(outVector)
-	"""if(len(outVector) != len(nOut)):
-		print("Output vector is too long.")
-		exit()"""
 
 	print("\n")
 

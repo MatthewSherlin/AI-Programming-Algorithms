@@ -25,13 +25,9 @@ def main():
             yVals.append(int(row[1]))
             points.append((row[0], row[1]))
     print("Points: ", points)
-    #print("xValues: ",xVals)
-    #print("yValues: ",yVals)
 
     plt.plot(xVals, yVals, 'k.', label='points')
     plt.axis([0, 100, 0, 100])
-        ##for i, j in zip(xVals, yVals):
-            ##plt.text(i, j+0.5, '({}, {})'.format(i, j))
     plt.title('Graph of Points')
     plt.show()
 
