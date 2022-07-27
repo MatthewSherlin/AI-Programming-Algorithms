@@ -1,5 +1,5 @@
 # Artifical Intelligence Algorithms
-4 Artificial ntelligence algorithms created from scratch in python.
+4 Artificial intelligence algorithms created from scratch in python.
 
 Repository contains examples of
 
