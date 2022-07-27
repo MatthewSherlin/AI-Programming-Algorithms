@@ -1,6 +1,5 @@
 from itertools import product
 import numpy as np
-import random
 
 #initializing states and emission vectors. Remains with A- and X-
 states=[]

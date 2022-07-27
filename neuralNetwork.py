@@ -1,8 +1,5 @@
-import os
-import sys
 import random
 import numpy as np
-import math
 
 xVals = []
 yVals = []
